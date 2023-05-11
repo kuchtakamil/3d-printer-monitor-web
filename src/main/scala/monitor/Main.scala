@@ -1,26 +1,79 @@
 package monitor
 
+import com.raquo.airstream.state.Var
 import org.scalajs.dom
-import com.raquo.laminar.api.L.{*, given}
+import com.raquo.laminar.api.L._
+import io.circe._
+import io.circe.parser._
+import io.circe.generic.semiauto.deriveDecoder
+import io.circe.parser.decode
+import org.scalajs.dom
+
+import scala.language.postfixOps
+
+sealed trait SimValue {
+  val updatedOn: String
+  val value: Int
+  val status: String
+}
+case class CarriageSpeed(updatedOn: String, value: Int, status: String)  extends SimValue
+case class BedTemperature(updatedOn: String, value: Int, status: String) extends SimValue
 
 object Main {
-  val wsUrl = "ws://localhost:9000/ws"
-  val ws = new dom.WebSocket(wsUrl)
+  def main(args: Array[String]): Unit = {
 
-  val nameVar = Var(initial = "0")
+    val wsUrl = "ws://localhost:9000/simvalue"
+    val ws    = new dom.WebSocket(wsUrl)
 
-  ws.onmessage = { (event: dom.MessageEvent) =>
-    val number = event.data.toString.toDouble
-    nameVar.update(_ => s"Received: $number")
-  }
-  val rootElement = div(
-    div(
-      h1("3D printer monitor"),
-      child.text <-- nameVar.signal
+    val carriageSpeedVar: Var[CarriageSpeed] = Var(
+      CarriageSpeed(
+        updatedOn = "Now",
+        value = 0,
+        status = "stopped",
+      )
     )
-  )
 
-  val containerNode = dom.document.querySelector("#app")
+    val bedTemperatureValueVar: Var[BedTemperature] = Var(
+      BedTemperature(
+        updatedOn = "Now",
+        value = 0,
+        status = "stopped",
+      )
+    )
 
-  render(containerNode, rootElement)
+    implicit lazy val simValDecoder: Decoder[SimValue] = deriveDecoder
+
+    ws.onmessage = { (event: dom.MessageEvent) =>
+      ws.send("ping")
+
+      val simValue: Either[Error, SimValue] = decode[SimValue](event.data.toString)
+      simValue match {
+        case Right(cs: CarriageSpeed)  => carriageSpeedVar.update(_ => cs)
+        case Right(bt: BedTemperature) => bedTemperatureValueVar.update(_ => bt)
+        case Left(err)                 => println(s"Decoding failed: $err")
+      }
+    }
+
+    val rootElement = div(
+      cls("container"),
+      div(
+        cls("data-row"),
+        h3("Carriage Speed"),
+        div(cls("value"), child.text <-- carriageSpeedVar.signal.map(v => v.value)),
+        div(cls("value"), child.text <-- carriageSpeedVar.signal.map(v => v.status)),
+        div(cls("value"), child.text <-- carriageSpeedVar.signal.map(v => v.updatedOn)),
+      ),
+      div(
+        cls("data-row"),
+        h3("Bed Temperature"),
+        div(cls("value"), child.text <-- bedTemperatureValueVar.signal.map(v => v.value)),
+        div(cls("value"), child.text <-- bedTemperatureValueVar.signal.map(v => v.status)),
+        div(cls("value"), child.text <-- bedTemperatureValueVar.signal.map(v => v.updatedOn)),
+      ),
+    )
+
+    val containerNode = dom.document.querySelector("#app")
+
+    render(containerNode, rootElement)
+  }
 }

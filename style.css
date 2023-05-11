@@ -1,8 +1,54 @@
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body,
+div,
+h3 {
+  margin: 0;
+  padding: 0;
 }
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f1f1f1;
+}
+
+.container {
+  max-width: 500px;
+  margin: 20px auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.data-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+
+.data-row > div {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+}
+
+.data-row > div:first-child {
+  font-weight: bold;
+}
+
+.data-row > div:not(:first-child) {
+  flex-grow: 1;
+  margin-left: 10px;
+  text-align: center;
+}
+
+.data-row > div:last-child {
+  margin-right: 0;
+}
+
+.data-row > div[data-status="valid"] {
+  color: #fff;
+  background-color: green;
+}
+
+.data-row > div[data-status="invalid"] {
+  color: #fff;
