@@ -1,0 +1,65 @@
+h5 {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f1f1f1;
+}
+
+.container {
+  max-width: 650px;
+  margin: 20px auto;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.data-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.data-row > div {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+}
+
+.data-row > div:first-child {
+  font-weight: bold;
+  flex-basis: 35%;
+}
+
+.data-row > div:nth-child(2) {
+  flex-basis: 20%;
+}
+
+.data-row > div:nth-child(3) {
+  flex-basis: 20%;
+}
+.data-row > div:nth-child(4) {
+  flex-basis: 25%;
+}
+
+.data-row > div:not(:first-child) {
+  margin-left: 10px;
+  text-align: center;
+}
+
+.data-row > div:last-child {
+  margin-right: 0;
+}
+
+.data-row > div[data-status="valid"] {
+  color: #fff;
+  background-color: green;
+}
+
+.data-row > div[data-status="invalid"] {
+  color: #fff;
+  background-color: red;
+}

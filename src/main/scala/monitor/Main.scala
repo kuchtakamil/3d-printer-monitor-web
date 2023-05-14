@@ -22,7 +22,7 @@ case class BedTemperature(updatedOn: String, value: Int, status: String) extends
 object Main {
   def main(args: Array[String]): Unit = {
 
-    val wsUrl = "ws://localhost:9000/simvalue"
+    val wsUrl = "ws://127.0.0.1:9000/simvalue"
     val ws    = new dom.WebSocket(wsUrl)
 
     val carriageSpeedVar: Var[CarriageSpeed] = Var(
@@ -58,15 +58,15 @@ object Main {
       cls("container"),
       div(
         cls("data-row"),
-        h3("Carriage Speed"),
-        div(cls("value"), child.text <-- carriageSpeedVar.signal.map(v => v.value)),
+        h5("Carriage Speed"),
+        div(cls("value"), child.text <-- carriageSpeedVar.signal.map(v => v.value + " m/s")),
         div(cls("value"), child.text <-- carriageSpeedVar.signal.map(v => v.status)),
         div(cls("value"), child.text <-- carriageSpeedVar.signal.map(v => v.updatedOn)),
       ),
       div(
         cls("data-row"),
-        h3("Bed Temperature"),
-        div(cls("value"), child.text <-- bedTemperatureValueVar.signal.map(v => v.value)),
+        h5("Bed Temperature"),
+        div(cls("value"), child.text <-- bedTemperatureValueVar.signal.map(v => v.value + " ℃")),
         div(cls("value"), child.text <-- bedTemperatureValueVar.signal.map(v => v.status)),
         div(cls("value"), child.text <-- bedTemperatureValueVar.signal.map(v => v.updatedOn)),
       ),
