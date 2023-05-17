@@ -54,12 +54,12 @@ body {
   margin-right: 0;
 }
 
-.data-row > div[data-status="valid"] {
-  color: #fff;
-  background-color: green;
+.invalid {
+  color: red;
+  font-weight: bold;
 }
 
-.data-row > div[data-status="invalid"] {
-  color: #fff;
-  background-color: red;
+.valid {
+  color: green;
+  font-weight: bold;
 }

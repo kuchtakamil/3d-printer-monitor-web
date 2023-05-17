@@ -60,14 +60,22 @@ object Main {
         cls("data-row"),
         h5("Carriage Speed"),
         div(cls("value"), child.text <-- carriageSpeedVar.signal.map(v => v.value + " m/s")),
-        div(cls("value"), child.text <-- carriageSpeedVar.signal.map(v => v.status)),
+        div(
+          cls("value"),
+          cls <-- carriageSpeedVar.signal.map(v => v.status.toString),
+          child.text <-- carriageSpeedVar.signal.map(v => v.status),
+        ),
         div(cls("value"), child.text <-- carriageSpeedVar.signal.map(v => v.updatedOn)),
       ),
       div(
         cls("data-row"),
         h5("Bed Temperature"),
         div(cls("value"), child.text <-- bedTemperatureValueVar.signal.map(v => v.value + " ℃")),
-        div(cls("value"), child.text <-- bedTemperatureValueVar.signal.map(v => v.status)),
+        div(
+          cls("value"),
+          cls <-- bedTemperatureValueVar.signal.map(v => v.status.toString),
+          child.text <-- bedTemperatureValueVar.signal.map(v => v.status),
+        ),
         div(cls("value"), child.text <-- bedTemperatureValueVar.signal.map(v => v.updatedOn)),
       ),
     )
